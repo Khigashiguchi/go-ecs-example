@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  ecs_sample_api:
+    container_name: ecs_sample_api
+    build: .
+    ports:
+      - 8080:80
+    depends_on:
+      - ecs_sample_mysql
+    restart: on-failure
+    environment:
+      DB_USER: sample_user
+      DB_PASSWORD: sample_password
+      DB_HOST: ecs_sample_mysql
+      DB_PORT: 3306
+      DB_NAME: sample
+  ecs_sample_mysql:
+    container_name: ecs_sample_mysql
+    image: mysql:5.6
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sample
+      MYSQL_USER: sample_user
+      MYSQL_PASSWORD: sample_password
