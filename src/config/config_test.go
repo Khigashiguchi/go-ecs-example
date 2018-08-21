@@ -15,7 +15,7 @@ func TestNewConfig(t *testing.T) {
 		expected config.Config
 	}{
 		{
-			name:    "localhost",
+			name: "localhost",
 			expected: config.Config{
 				DB: config.DBConfig{
 					User:     "sample_user",

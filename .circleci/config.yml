@@ -1,0 +1,73 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/Khigashiguchi/go-ecs-example/
+    docker:
+      - image: circleci/golang:1.10.0
+      #- image: mysql:5.6
+    environment:
+      - GOCACHE: "/tmp/go/cache"
+      - DEP_VERSION: 0.5.0
+      - APP_DIR: /go/src/github.com/Khigashiguchi/go-ecs-example/src
+    steps:
+      - checkout
+      - run:
+          name: move-dir
+          command: cd src
+      - restore_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+          paths:
+          - ${APP_DIR}/vendor
+      - run:
+          name: download-libraries
+          command: |
+            if [ ! -d ${APP_DIR}/vendor ]; then
+              curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o /go/bin/dep
+              chmod +x /go/bin/dep
+              /go/bin/dep ensure
+            fi
+      - save_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+          paths:
+            - ${APP_DIR}/vendor
+      - restore_cache:
+          keys:
+            - build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache
+      - run:
+          name: formet-check
+          command: test -z "$(go fmt $(go list ./... | grep -v /vendor/) | tee /dev/stderr)"
+      - run:
+          name: goimports
+          command: |
+            go get golang.org/x/tools/cmd/goimports
+            test -z "$(goimports -l $(find . -name "*.go" | grep -v /vendor/) | tee /dev/stderr)"
+      - run:
+          name: lint-check
+          command: |
+            go get github.com/golang/lint/golint
+            test -z "$(golint $(go list ./... | grep -v /vendor/) | tee /dev/stderr)"
+      - run:
+          name: go-vet
+          command: go vet ./...
+      - run:
+          name: security-check
+          command: |
+            go get github.com/securego/gosec/cmd/gosec/...
+            gosec ./...
+      - run:
+          name: test
+          command: |
+            mkdir -p $GOCACHE
+            go build -v
+            go test -p 6 -race -cover ./...
+      - run:
+          name: calcurate-cyclomatic-complexities
+          command: |
+            go get github.com/fzipp/gocyclo
+            gocyclo -avg $(find . -name "*.go" | grep -v /vendor/ | grep -v _test)
+      - save_cache:
+          key: build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache

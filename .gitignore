@@ -13,3 +13,6 @@
 
 # Editor
 .idea
+
+# dep
+src/vendor

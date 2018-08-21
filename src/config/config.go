@@ -23,17 +23,16 @@ type Config struct {
 func NewConfig() (Config, error) {
 	var conf Config
 
-
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		return conf, err
 	}
 	dbConf := DBConfig{
-		User: os.Getenv("DB_USER"),
+		User:     os.Getenv("DB_USER"),
 		Password: os.Getenv("DB_PASSWORD"),
-		Host: os.Getenv("DB_HOST"),
-		Port: port,
-		Name: os.Getenv("DB_NAME"),
+		Host:     os.Getenv("DB_HOST"),
+		Port:     port,
+		Name:     os.Getenv("DB_NAME"),
 	}
 	conf.DB = dbConf
 

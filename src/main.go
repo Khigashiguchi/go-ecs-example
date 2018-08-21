@@ -33,6 +33,7 @@ func NewDB(conf config.DBConfig) (*sql.DB, error) {
 	return db, nil
 }
 
+// Handler represents each routing handler.
 type Handler struct {
 	DB *sql.DB
 }
@@ -66,8 +67,8 @@ func main() {
 	})
 
 	// Serve HTTP service
-	fmt.Fprint(os.Stdout, ">> Start to listen http server post :8080\n")
-	if err = http.ListenAndServe(":8080", r); err != nil {
+	fmt.Fprint(os.Stdout, ">> Start to listen http server post :80\n")
+	if err = http.ListenAndServe(":80", r); err != nil {
 		panic(err.Error())
 	}
 }
