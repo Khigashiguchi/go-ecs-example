@@ -8,16 +8,9 @@ jobs:
     environment:
       - GOCACHE: "/tmp/go/cache"
       - DEP_VERSION: 0.5.0
-      - APP_DIR: /go/src/github.com/Khigashiguchi/go-ecs-example/src
+      - APP_DIR: /go/src/github.com/Khigashiguchi/go-ecs-example
     steps:
       - checkout
-      - run:
-          name: move-dir
-          command: cd src
-      - restore_cache:
-          key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
-          paths:
-          - ${APP_DIR}/vendor
       - run:
           name: download-libraries
           command: |

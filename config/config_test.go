@@ -5,7 +5,7 @@ import (
 
 	"os"
 
-	"github.com/Khigashiguchi/go-ecs-example/src/config"
+	"github.com/Khigashiguchi/go-ecs-example/config"
 	"github.com/stretchr/testify/assert"
 )
 

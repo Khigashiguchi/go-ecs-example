@@ -9,7 +9,7 @@ import (
 
 	"os"
 
-	"github.com/Khigashiguchi/go-ecs-example/src/config"
+	"github.com/Khigashiguchi/go-ecs-example/config"
 	_ "github.com/go-sql-driver/mysql" // mysql driverを使うため
 )
 

@@ -3,7 +3,7 @@ version: '3'
 services:
   ecs_sample_api:
     container_name: ecs_sample_api
-    build: ./src
+    build: .
     ports:
       - 8080:80
     depends_on:

@@ -15,4 +15,4 @@
 .idea
 
 # dep
-src/vendor
+vendor
