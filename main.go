@@ -49,12 +49,14 @@ func main() {
 	// Get configuration
 	conf, err := config.NewConfig()
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get configuration: %s", err)
 		panic(err.Error())
 	}
 
 	// Get database Handle
 	db, err := NewDB(conf.DB)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get connection with database: %s", err)
 		panic(err.Error())
 	}
 
@@ -69,6 +71,7 @@ func main() {
 	// Serve HTTP service
 	fmt.Fprint(os.Stdout, ">> Start to listen http server post :80\n")
 	if err = http.ListenAndServe(":80", r); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to start http server: %s", err)
 		panic(err.Error())
 	}
 }
