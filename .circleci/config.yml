@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/Khigashiguchi/go-ecs-example/
     docker:
-      - image: circleci/golang:1.10.0
+      - image: circleci/golang:1.11.0
       #- image: mysql:5.6
     environment:
       - GOCACHE: "/tmp/go/cache"
